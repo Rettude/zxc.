@@ -1,5 +1,31 @@
 from tkinter import *
 from tkinter import messagebox
+from bs4 import BeautifulSoup
+import requests
+
+def get_html(url):
+    # делаем запрос по адресу
+    html_content = requests.get(url)
+    # получаем содержание
+    return html_content.text
+
+
+def get_data(html):
+    soup = BeautifulSoup(html, 'lxml')
+    t = soup.find('div', class_= "chart__subtitle js-chart-value")
+    t.span.decompose()  # убираем вложенный div
+    return t.text
+
+
+def main():
+    txt.delete(0, "end")
+    url = 'https://www.rbc.ru/crypto/currency/xmrusd'
+    res = get_html(url)
+    print(get_data(res))
+    ddd = get_data(res)
+
+    '''txt.insert(0, get_data(res))'''
+
 
 
 def zn():
@@ -9,9 +35,10 @@ def zn():
     txt1.delete(0, END)
 
     if var.get() == 0:
-        res = float(x) * 80
+        res = float(x) * 50
     elif var.get() == 1:
         res = float(x) * 90
+    main()
 
     txt1.insert(0, str(round(res, 2)))
 
